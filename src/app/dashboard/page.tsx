@@ -1,26 +1,49 @@
+import { DollarSign, UserCheck, Users } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const stats = [
-  { label: "Total Users", value: "1200" },
-  { label: "Active Users", value: "860" },
-  { label: "Revenue", value: "$12,400" },
+  { label: "Total Users", value: "1,200", icon: Users },
+  { label: "Active Users", value: "860", icon: UserCheck },
+  { label: "Revenue", value: "$12,400", icon: DollarSign },
 ];
 
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen bg-slate-50 p-6 md:p-10">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+    <main className="min-h-screen bg-background p-4 md:p-6">
+      <div className="mx-auto max-w-6xl">
+        <header className="space-y-2">
+          <h1 className="text-base font-semibold tracking-tight text-foreground md:text-lg lg:text-xl">
+            Dashboard
+          </h1>
+          <p className="text-sm text-muted-foreground md:text-base lg:text-lg">
+            Track your key metrics and team performance in one place.
+          </p>
+        </header>
 
-        {/* Working KPI cards grid */}
-        <section className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {stats.map((stat) => (
-            <article
-              key={stat.label}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-            >
-              <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-              <p className="mt-3 text-3xl font-semibold text-slate-900">{stat.value}</p>
-            </article>
-          ))}
+        <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+
+            return (
+              <Card
+                key={stat.label}
+                className="border bg-card text-foreground shadow-sm transition-shadow hover:shadow-md"
+              >
+                <CardHeader className="flex flex-row items-center justify-between gap-2 p-4 pb-2 md:p-6 md:pb-2">
+                  <CardTitle className="text-sm font-semibold text-muted-foreground">{stat.label}</CardTitle>
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <Icon className="h-[18px] w-[18px]" />
+                  </span>
+                </CardHeader>
+                <CardContent className="p-4 pt-1 md:p-6 md:pt-1">
+                  <p className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+                    {stat.value}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </section>
       </div>
     </main>

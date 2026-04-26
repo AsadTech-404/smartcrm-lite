@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Activity, Users } from "lucide-react";
 
 type UserStatus = "Active" | "Inactive";
 type SegmentFilter = "All Users" | "Active" | "Inactive";
@@ -58,42 +59,86 @@ export default function SegmentsPage() {
   };
 
   return (
-    <main className="p-4 sm:p-6 lg:p-10">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">User Segments</h1>
+    <main className="min-h-screen bg-background p-4 md:p-6">
+      <div className="mx-auto max-w-6xl space-y-6 md:space-y-8">
+        <h1 className="text-base font-semibold tracking-tight text-foreground md:text-lg lg:text-xl">
+          User Segments
+        </h1>
 
         {/* Working segment summary cards */}
-        <section className="mt-6 grid gap-4 sm:grid-cols-2">
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <button
             type="button"
             onClick={() => handleFilterChange("Active")}
-            className={`rounded-2xl border p-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+            className={`min-h-28 rounded-2xl border border-border bg-card p-4 text-left text-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md md:p-5 ${
               selectedFilter === "Active"
-                ? "border-emerald-300 bg-emerald-50 ring-2 ring-emerald-100"
-                : "border-slate-200 bg-white hover:border-slate-300"
+                ? "bg-primary text-primary-foreground"
+                : "hover:bg-card/90"
             }`}
           >
-            <p className="text-sm font-medium text-slate-600">Active Users</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-900">{activeCount}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p
+                  className={`text-sm font-semibold ${
+                    selectedFilter === "Active"
+                      ? "text-primary-foreground/90"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  Active
+                </p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{activeCount}</p>
+              </div>
+              <span
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-md border transition-all duration-200 ${
+                  selectedFilter === "Active"
+                    ? "border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground"
+                    : "border-border bg-background text-muted-foreground"
+                }`}
+              >
+                <Activity className="h-4 w-4" />
+              </span>
+            </div>
           </button>
 
           <button
             type="button"
             onClick={() => handleFilterChange("Inactive")}
-            className={`rounded-2xl border p-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+            className={`min-h-28 rounded-2xl border border-border bg-card p-4 text-left text-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md md:p-5 ${
               selectedFilter === "Inactive"
-                ? "border-rose-300 bg-rose-50 ring-2 ring-rose-100"
-                : "border-slate-200 bg-white hover:border-slate-300"
+                ? "bg-primary text-primary-foreground"
+                : "hover:bg-card/90"
             }`}
           >
-            <p className="text-sm font-medium text-slate-600">Inactive Users</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-900">{inactiveCount}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p
+                  className={`text-sm font-semibold ${
+                    selectedFilter === "Inactive"
+                      ? "text-primary-foreground/90"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  Inactive
+                </p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{inactiveCount}</p>
+              </div>
+              <span
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-md border transition-all duration-200 ${
+                  selectedFilter === "Inactive"
+                    ? "border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground"
+                    : "border-border bg-background text-muted-foreground"
+                }`}
+              >
+                <Users className="h-4 w-4" />
+              </span>
+            </div>
           </button>
         </section>
 
         {/* Working filter tabs + filtered users list */}
-        <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <div className="flex flex-wrap gap-2">
+        <section className="rounded-2xl border border-border bg-card p-4 text-foreground shadow-sm transition-all duration-200 md:p-6">
+          <div className="flex flex-wrap gap-2 md:gap-3">
             {filters.map((filter) => {
               const isActive = selectedFilter === filter;
 
@@ -102,10 +147,10 @@ export default function SegmentsPage() {
                   key={filter}
                   type="button"
                   onClick={() => handleFilterChange(filter)}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                  className={`h-11 rounded-full px-4 text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "bg-slate-900 text-white shadow-sm"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "border border-border bg-background text-muted-foreground hover:bg-card"
                   }`}
                 >
                   {filter}
@@ -122,14 +167,14 @@ export default function SegmentsPage() {
             {filteredUsers.map((user) => (
               <article
                 key={user.name}
-                className="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50"
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-3 text-foreground transition-all duration-200 hover:bg-background"
               >
-                <p className="font-medium text-slate-900">{user.name}</p>
+                <p className="text-sm font-semibold md:text-base">{user.name}</p>
                 <span
-                  className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  className={`inline-flex rounded-full border border-border px-2.5 py-1 text-xs font-semibold transition-all duration-200 ${
                     user.status === "Active"
-                      ? "bg-emerald-100 text-emerald-700"
-                      : "bg-rose-100 text-rose-700"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background text-muted-foreground"
                   }`}
                 >
                   {user.status}
@@ -138,7 +183,7 @@ export default function SegmentsPage() {
             ))}
 
             {filteredUsers.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500">
+              <p className="rounded-xl border border-dashed border-border bg-card px-4 py-6 text-center text-sm text-muted-foreground transition-all duration-200">
                 No users found for this segment.
               </p>
             ) : null}
