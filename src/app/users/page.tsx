@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,18 +26,9 @@ type FormErrors = {
   email?: string;
 };
 
-const initialUsers: User[] = [
-  { name: "Ayesha Khan", email: "ayesha.khan@example.com", status: "Active" },
-  { name: "Bilal Ahmed", email: "bilal.ahmed@example.com", status: "Inactive" },
-  { name: "Hina Ali", email: "hina.ali@example.com", status: "Active" },
-  { name: "Usman Tariq", email: "usman.tariq@example.com", status: "Active" },
-  { name: "Sara Noor", email: "sara.noor@example.com", status: "Inactive" },
-  { name: "Zain Iqbal", email: "zain.iqbal@example.com", status: "Active" },
-];
 
 export default function UsersPage() {
-  // Working table data state (includes newly added users).
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -46,6 +37,12 @@ export default function UsersPage() {
     email: "",
     status: "Active",
   });
+
+  useEffect(() => {
+    fetch("/api/users")
+    .then(res => res.json())
+    .then(data => setUsers(data));
+  },[]);
 
   const filteredUsers = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -57,34 +54,44 @@ export default function UsersPage() {
     return users.filter((user) => user.name.toLowerCase().includes(query));
   }, [searchTerm, users]);
 
-  const handleAddUser = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     const name = formData.name.trim();
     const email = formData.email.trim();
     const errors: FormErrors = {};
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Working validation: required fields + email format check.
-    if (!name) {
-      errors.name = "Name is required.";
-    }
-
+  
+    if (!name) errors.name = "Name is required.";
     if (!email) {
       errors.email = "Email is required.";
     } else if (!emailPattern.test(email)) {
       errors.email = "Please enter a valid email address.";
     }
-
+  
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
     }
-
-    setUsers((prevUsers) => [
-      ...prevUsers,
-      { name, email, status: formData.status },
-    ]);
+  
+    // CALL API
+    await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        status: formData.status,
+      }),
+    });
+  
+    // REFETCH USERS
+    const res = await fetch("/api/users");
+    const data = await res.json();
+    setUsers(data);
+  
     setFormData({ name: "", email: "", status: "Active" });
     setFormErrors({});
     setShowAddForm(false);
