@@ -33,7 +33,7 @@ export default function DashboardPage() {
                 <CardHeader className="flex flex-row items-center justify-between gap-2 p-4 pb-2 md:p-6 md:pb-2">
                   <CardTitle className="text-sm font-semibold text-muted-foreground">{stat.label}</CardTitle>
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
-                    <Icon className="h-[18px] w-[18px]" />
+                    <Icon className="h-4.5 w-4.5" />
                   </span>
                 </CardHeader>
                 <CardContent className="p-4 pt-1 md:p-6 md:pt-1">
