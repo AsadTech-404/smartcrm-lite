@@ -127,6 +127,9 @@ useEffect(() => {
 
   // Delete User
   const handleDeleteUser = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
     try {
       const res = await fetch("/api/users", {
         method: "DELETE",
