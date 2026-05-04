@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { UserCheck, Users, UserX } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartAreaInteractive } from "@/components/DashboardChart";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Stats = {
@@ -64,7 +65,7 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-6">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl space-y-8"> {/* Added space-y-8 for gap */}
         <header className="space-y-2">
           <h1 className="text-base font-semibold tracking-tight text-foreground md:text-lg lg:text-xl">
             Dashboard
@@ -74,7 +75,8 @@ export default function DashboardPage() {
           </p>
         </header>
 
-        <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
+        {/* Stats Section */}
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
           {isLoading ? (
             <>
               <StatCardSkeleton />
@@ -88,7 +90,6 @@ export default function DashboardPage() {
           ) : (
             statCards.map((stat) => {
               const Icon = stat.icon;
-
               return (
                 <Card
                   key={stat.label}
@@ -110,6 +111,18 @@ export default function DashboardPage() {
                 </Card>
               );
             })
+          )}
+        </section>
+
+        {/* Chart Section */}
+        <section className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          {isLoading ? (
+            <div className="p-6 space-y-4">
+              <Skeleton className="h-8 w-1/3" />
+              <Skeleton className="h-62.5 w-full" />
+            </div>
+          ) : (
+            <ChartAreaInteractive />
           )}
         </section>
       </div>

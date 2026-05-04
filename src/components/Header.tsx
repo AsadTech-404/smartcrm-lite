@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 
 export default function Header() {
     return (
-        <header className="flex justify-end items-center p-4 h-16 border-b">
+        <header className="flex justify-end items-center p-4 h-10 border-b">
                   {/* DESKTOP ONLY BUTTONS */}
                   <div className="hidden md:flex items-center gap-4">
                     <Show when="signed-out">
